@@ -1,20 +1,41 @@
-const request = require('request');
 const readlineSync = require('readline-sync');
+const request = require('request');
 
-const inpBusStop = readlineSync.question("Please input bus stop code: ");
+const {getResponse} = require('./requests');
+const {isValidPostcode} = require('./validation');
 
-const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${inpBusStop}/Arrivals`; //490009201E
-//const getCoordsUrl = `https://api.postcodes.io/postcodes/${inpPostCode}`;
+let inpPostcode = "";
+while (isValidPostcode(inpPostcode) === false) {
+    try {
+        inpPostcode = readlineSync.question("Please input your postcode: ");
+        if (isValidPostcode(inpPostcode) === false) {
+            throw "Invalid Postcode";
+        }
+    } catch (err) {
+        inpPostcode = "";
+        console.log("Postcode is invalid - please try again", err);
+    }
+}
 
-request(arrivalsUrl, function (error, response, arrivalsResponse) {
-    if (error) {
-        console.error('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-    } else {
-        const arrivals = JSON.parse(arrivalsResponse)
-        try {
-            if (arrivals != "") {
+let coords = "";
+let latitude = "";
+let longitude = "";
+const getCoordsUrl = `https://api.postcodes.io/postcodes/${encodeURI(inpPostcode)}`;
+const getCoords = async () => {
+    coords = await getResponse(getCoordsUrl);
+    latitude = coords.result.latitude;
+    longitude = coords.result.longitude;
 
+    const getBusStopsUrl = `https://api.tfl.gov.uk/StopPoint/?lat=${latitude}&lon=${longitude}&stopTypes=NaptanPublicBusCoachTram&radius=1000`
+    const getBusStops = async () => {
+        busStops = await getResponse(getBusStopsUrl);
+        const nearest2BusStops = busStops.stopPoints.slice(0,2);
+        nearest2BusStops.forEach(busStop => {
+            console.log(`Bus stop: ${busStop.commonName}`)
+            const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${busStop.naptanId}/Arrivals`; //490009201E
+            let arrivals = [];
+            const getArrivals = async () => {
+                arrivals = await getResponse(arrivalsUrl);
                 arrivals.sort(function (a, b) {
                     return a.expectedArrival.substring(11, 16).localeCompare(b.expectedArrival.substring(11, 16));
                 });
@@ -23,12 +44,10 @@ request(arrivalsUrl, function (error, response, arrivalsResponse) {
                 firstFiveArrivals.forEach(bus => {
                     console.log(`Bus no. ${bus.lineName} to ${bus.destinationName} is arriving at ${bus.expectedArrival.substring(11, 16)}`);
                 })
-            } else {
-                throw "Sorry, no buses scheduled to arrive";
             }
-        }
-        catch (err) {
-            console.log(err);
-        }
+            getArrivals();
+        })
     }
-});
+    getBusStops();
+}
+getCoords();
