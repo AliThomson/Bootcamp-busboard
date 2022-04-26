@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AliThomson/Bootcamp-busboard#readme",
   "dependencies": {
+    "readline-sync": "^1.4.10",
     "request": "^2.88.2"
   }
 }
