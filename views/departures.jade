@@ -3,7 +3,7 @@ extends layout
 block content
     h1= title
     p Welcome to #{title}
-    h1 Arrivals for #{busStop}
-    p - arrivals.forEach(function(bus)) {
-          li= bus
+    h1 Arrivals for #{busArrivals[0].stopName}
+    p - busArrivals.forEach(function(bus)) {
+          li Arriving at #{bus.stopName}: #{bus.line} travelling to #{bus.destination} arriving at #{bus.arrivalTime}
       - })
