@@ -25,6 +25,9 @@ reqPromise(setOptions(getCoordsUrl))
         return getBusStopsUrl = `https://api.tfl.gov.uk/StopPoint/?lat=${coords.result.latitude}&lon=${coords.result.longitude}&stopTypes=NaptanPublicBusCoachTram&radius=1000`;
     })
     .then(busStops => reqPromise(setOptions(getBusStopsUrl)))
+    .catch(function (err) {
+        console.log(err);
+    })
     .then(busStops => {
         const nearest2BusStops = busStops.stopPoints.slice(0,2);
         nearest2BusStops.forEach(busStop => {
@@ -41,6 +44,9 @@ reqPromise(setOptions(getCoordsUrl))
                     console.log(`Bus no. ${bus.lineName} to ${bus.destinationName} is arriving at ${bus.expectedArrival.substring(11, 16)}`);
                 })
             })
+            .catch(function (err) {
+                console.log(err);
+                })
         })
     })
     .catch(function (err) {
