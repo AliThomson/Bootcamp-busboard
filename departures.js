@@ -28,7 +28,7 @@ class Arrival {
         this.arrivalTime = arrivalTime;
     }
 }
-exports.getDepartures = function(inpPostcode) {
+exports.getDepartures = async function(inpPostcode) {
 
     const getCoordsUrl = `https://api.postcodes.io/postcodes/${encodeURI(inpPostcode)}`;
 
@@ -42,31 +42,28 @@ exports.getDepartures = function(inpPostcode) {
         })
         .then(busStops => {
             const nearest2BusStops = busStops.stopPoints.slice(0, 2);
-            let combinedArrivals = [];
             nearest2BusStops.forEach(busStop => {
                 console.log(`Bus stop: ${busStop.commonName}`);
                 const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${busStop.naptanId}/Arrivals`;
                 reqPromise(setOptions(arrivalsUrl))
-                    .then(function (arrivals) {
+                    .then(function(arrivals) {
                         arrivals.sort(function (a, b) {
                             return a.expectedArrival.substring(11, 16).localeCompare(b.expectedArrival.substring(11, 16));
                         });
-
                         const firstFiveArrivals = arrivals.slice(0, 5);
+                        return firstFiveArrivals.map(arrival => {
+                            console.log(`station name: ${arrival.stationName}, line: ${arrival.lineName}, dest:  ${arrival.destinationName}, arrival: ${arrival.expectedArrival}`);
+                            return new Arrival(arrival.stationName, arrival.lineName, arrival.destinationName, arrival.expectedArrival);
+                        });
 
-                        firstFiveArrivals.forEach(bus => {
-                            combinedArrivals.push(new Arrival(bus.stationName, bus.lineName, bus.destinationName, bus.expectedArrival));
-                        })
-
-                        //make this a promise?
-                        return combinedArrivals;
                     })
                     .catch(function (err) {
                         console.log(err);
                     })
-            })
+                })
+
         })
         .catch(function (err) {
             console.log(err);
-        });
+        })
 }
