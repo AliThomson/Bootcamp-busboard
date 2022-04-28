@@ -28,8 +28,8 @@ class Arrival {
         this.arrivalTime = arrivalTime;
     }
 }
-exports.getDepartures = function() {
-    const inpPostcode = "W139DE";
+exports.getDepartures = function(inpPostcode) {
+
     const getCoordsUrl = `https://api.postcodes.io/postcodes/${encodeURI(inpPostcode)}`;
 
     reqPromise(setOptions(getCoordsUrl))
@@ -57,9 +57,8 @@ exports.getDepartures = function() {
                         firstFiveArrivals.forEach(bus => {
                             combinedArrivals.push(new Arrival(bus.stationName, bus.lineName, bus.destinationName, bus.expectedArrival));
                         })
-                        combinedArrivals.forEach(bus => {
-                            console.log(`CombinedArrivals: ${bus.stopName}, ${bus.line},${bus.destination}, ${bus.arrivalTime}`);
-                        })
+
+                        //make this a promise?
                         return combinedArrivals;
                     })
                     .catch(function (err) {
