@@ -6,10 +6,19 @@ const {getDepartures} = require('../departures');
 
 router.get('/', async function(req, res, next) {
   const combinedArrivals = await getDepartures("W139DE");
-  res.render('departures', { title: 'Departures', busArrivals: combinedArrivals });
+  res.json(combinedArrivals);
+      // .then(result => {
+      //   console.log(`CombinedArrivals = ${combinedArrivals.stopName}`)
+      //   res.render('departures', {title: 'Departures', busArrivals: combinedArrivals})
+      // });
 });
+// router.get('/', async function(req, res, next) {
+//   await getDepartures("W139DE")
+//       .then((combinedArrivals) => {
+//         console.log(`CombinedArrivals = ${combinedArrivals.stopName}`);
+//         res.render('departures', {title: 'Departures', busArrivals: combinedArrivals});
+//       })
+// })
 
 module.exports = router;
-// combinedArrivals.forEach(bus => {
-//   console.log(`CombinedArrivals: ${bus.stopName}, ${bus.line}, ${bus.destination}, ${bus.arrivalTime}`);
-// })
+

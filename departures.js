@@ -32,7 +32,7 @@ exports.getDepartures = async function(inpPostcode) {
 
     const getCoordsUrl = `https://api.postcodes.io/postcodes/${encodeURI(inpPostcode)}`;
 
-    reqPromise(setOptions(getCoordsUrl))
+    return reqPromise(setOptions(getCoordsUrl))
         .then(function (coords) {
             return getBusStopsUrl = `https://api.tfl.gov.uk/StopPoint/?lat=${coords.result.latitude}&lon=${coords.result.longitude}&stopTypes=NaptanPublicBusCoachTram&radius=1000`;
         })
@@ -45,7 +45,7 @@ exports.getDepartures = async function(inpPostcode) {
             nearest2BusStops.forEach(busStop => {
                 console.log(`Bus stop: ${busStop.commonName}`);
                 const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${busStop.naptanId}/Arrivals`;
-                reqPromise(setOptions(arrivalsUrl))
+                return reqPromise(setOptions(arrivalsUrl))
                     .then(function(arrivals) {
                         arrivals.sort(function (a, b) {
                             return a.expectedArrival.substring(11, 16).localeCompare(b.expectedArrival.substring(11, 16));
@@ -61,7 +61,7 @@ exports.getDepartures = async function(inpPostcode) {
                         console.log(err);
                     })
                 })
-
+                return nearest2BusStops;
         })
         .catch(function (err) {
             console.log(err);

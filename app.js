@@ -11,10 +11,6 @@ var departuresRouter = require('./routes/departures');
 const app = express()
 const port = 3001
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -25,9 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
 app.use('/departures', departuresRouter);
+app.use(express.static('frontend'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
