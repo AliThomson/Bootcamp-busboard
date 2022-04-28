@@ -1,0 +1,79 @@
+[{
+"$type":"Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities"
+,"naptanId":"490008110N"
+,"indicator":"->N"
+,"stopLetter":"->N"
+,"modes":["bus"]
+,"icsCode":"1008110"
+,"stopType":"NaptanPublicBusCoachTram"
+,"stationNaptan":"490G00008110"
+,"lines":
+[{
+"$type":"Tfl.Api.Presentation.Entities.Identifier, Tfl.Api.Presentation.Entities"
+,"id":"e2"
+,"name":"E2"
+,"uri":"/Line/e2"
+,"type":"Line"
+,"crowding":{"$type":"Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"}
+,"routeType":"Unknown","status":"Unknown"}
+,{"$type":"Tfl.Api.Presentation.Entities.Identifier, Tfl.Api.Presentation.Entities"
+,"id":"e3"
+,"name":"E3"
+,"uri":"/Line/e3"
+,"type":"Line"
+,"crowding":{"$type":"Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"}
+,"routeType":"Unknown","status":"Unknown"}
+,{"$type":"Tfl.Api.Presentation.Entities.Identifier, Tfl.Api.Presentation.Entities"
+,"id":"n11"
+,"name":"N11"
+,"uri":"/Line/n11"
+,"type":"Line"
+,"crowding":{"$type":"Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"}
+,"routeType":"Unknown","status":"Unknown"
+}]
+,"lineGroup":
+[{"$type":"Tfl.Api.Presentation.Entities.LineGroup, Tfl.Api.Presentation.Entities"
+,"naptanIdReference":"490008110N"
+,"stationAtcoCode":"490G00008110"
+,"lineIdentifier"
+:["e2","e3","n11"]
+}]
+,"lineModeGroups":
+[{"$type":"Tfl.Api.Presentation.Entities.LineModeGroup, Tfl.Api.Presentation.Entities"
+,"modeName":"bus"
+,"lineIdentifier":["e2","e3","n11"]
+}]
+,"status":true,"id":"490008110N"
+,"commonName":"Hessel Road"
+,"distance":383.89601391113285
+,"placeType":"StopPoint"
+,"additionalProperties":[{"$type":"Tfl.Api.Presentation.Entities.AdditionalProperties, Tfl.Api.Presentation.Entities"
+,"category":"Direction","key":"CompassPoint","sourceSystemKey":"Naptan490","value":"N"}
+,{"$type":"Tfl.Api.Presentation.Entities.AdditionalProperties, Tfl.Api.Presentation.Entities"
+,"category":"Direction"
+,"key":"Towards"
+,"sourceSystemKey":"CountDown"
+,"value":"Ealing Broadway or Hanwell"
+}]
+,"children":[],"lat":51.50542,"lon":-0.319537}
+,{"$type":"Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities"
+,"naptanId":"490008110S","indicator":"->S","stopLetter":"->S","modes":["bus"]
+,"icsCode":"1008110","stopType":"NaptanPublicBusCoachTram"
+,"stationNaptan":"490G00008110"
+,"lines":[],"lineGroup":[]
+,"lineModeGroups":[]
+,"status":true,"id":"490008110S"
+,"commonName":"Hessel Road"
+,"distance":406.6976899890947,"placeType":"StopPoint"
+,"additionalProperties":
+[{
+"$type":"Tfl.Api.Presentation.Entities.AdditionalProperties, Tfl.Api.Presentation.Entities"
+,"category":"Direction","key":"CompassPoint","sourceSystemKey":"Naptan490","value":"S"}
+,{"$type":"Tfl.Api.Presentation.Entities.AdditionalProperties, Tfl.Api.Presentation.Entities",
+"category":"Direction"
+,"key":"Towards"
+,"sourceSystemKey":"CountDown"
+,"value":"Acton or Brentford"
+}]
+,"children":[],"lat":51.505201,"lon":-0.319271
+}]
