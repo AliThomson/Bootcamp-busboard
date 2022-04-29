@@ -23,8 +23,10 @@ function getDepartures(postcode) {
                     document.body.appendChild(list);
 
                     busStop.arrivals.forEach(arrival => {
+                        let gmtTime = new Date(arrival.arrivalTime);
+                        let localTime = gmtTime.toLocaleTimeString('en-GB');
                         let li = document.createElement("li");
-                        li.innerText = `${arrival.line} to ${arrival.destination} arriving at ${arrival.arrivalTime.substring(11,16)}`;
+                        li.innerText = `${arrival.line} to ${arrival.destination} arriving at ${localTime}`;
                         list.appendChild(li);
                     });
                 })
@@ -35,6 +37,6 @@ function getDepartures(postcode) {
     }
     xhttp.send();
 }
-
+// arrival.arrivalTime.substring(11,16)
 
 
