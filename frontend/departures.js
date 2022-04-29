@@ -10,19 +10,24 @@ function getDepartures(postcode) {
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status === 200) {
                 var jsonResponse = JSON.parse(xhttp.response);
-                document.getElementById("stopName1").innerHTML = "<h2>Your results:</h2>"
-                document.getElementById("stopName1").innerHTML = `${jsonResponse[0].commonName} towards ${jsonResponse[0].towards}`;
-                document.getElementById("stopName2").innerHTML = `${jsonResponse[1].commonName} towards ${jsonResponse[1].towards}`;
+                document.getElementById("resultsHeader").innerHTML = "<h2>Your results:</h2>";
 
-                var str = "<ul>"
-                var obj = jsonResponse[0];
-                for (var key in obj){
-                    str += `<li>${key} is ${obj[key]}</li>`;
-                }
+                jsonResponse.forEach(busStop => {
+                    let stopName = document.createElement("h3");
+                    stopName.id = busStop.commonName;
+                    stopName.innerHTML = `${busStop.commonName} towards ${busStop.towards}`;
+                    document.body.appendChild(stopName);
 
-                //document.getElementById("fullResponse").innerHTML = str;
-                 document.getElementById("fullResponse").innerHTML = xhttp.responseText;
+                    let list = document.createElement("ul", { is : 'expanding-list' })
+                    list.id = busStop.commonName;
+                    document.body.appendChild(list);
 
+                    busStop.arrivals.forEach(arrival => {
+                        let li = document.createElement("li");
+                        li.innerText = `${arrival.line} to ${arrival.destination} arriving at ${arrival.arrivalTime.substring(11,16)}`;
+                        list.appendChild(li);
+                    });
+                })
             } else {
                 console.log(`error? ${xhttp.status}`);
             }
@@ -30,4 +35,6 @@ function getDepartures(postcode) {
     }
     xhttp.send();
 }
+
+
 
