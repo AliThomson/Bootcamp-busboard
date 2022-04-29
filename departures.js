@@ -16,18 +16,28 @@ const {isValidPostcode} = require('./validation');
 //         console.log("Postcode is invalid - please try again", err);
 //     }
 // }
+
+class BusStop {
+    naptanId;
+    commonName;
+    towards;
+    constructor(naptanId, commonName, towards) {
+        this.naptanId = naptanId;
+        this.commonName = commonName;
+        this.towards = towards;
+    }
+}
 class Arrival {
-    stopName;
     line;
     destination;
     arrivalTime;
-    constructor(stopName, line, destination, arrivalTime) {
-        this.stopName = stopName;
+    constructor(line, destination, arrivalTime) {
         this.line = line;
         this.destination = destination;
         this.arrivalTime = arrivalTime;
     }
 }
+
 exports.getDepartures = async function(inpPostcode) {
 
     const getCoordsUrl = `https://api.postcodes.io/postcodes/${encodeURI(inpPostcode)}`;
@@ -41,29 +51,47 @@ exports.getDepartures = async function(inpPostcode) {
             console.log(err);
         })
         .then(busStops => {
-            const nearest2BusStops = busStops.stopPoints.slice(0, 2);
-            nearest2BusStops.forEach(busStop => {
-                console.log(`Bus stop: ${busStop.commonName}`);
-                const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${busStop.naptanId}/Arrivals`;
+            let nearest2BusStops = busStops.stopPoints.slice(0, 2);
+            // if I put a return on 56 and 57 it's the nearest2BusStops that get's returned by the API, not combinedArrivals
+             nearest2BusStops.map(busStop => {
+                console.log("here");
+                new BusStop(busStop.naptanId, busStop.commonName, busStop.additionalProperties[1].value);
+            });
+            let combinedArrivals = [[]];
+
+            for (let i = 0; i < nearest2BusStops.length; i++) {
+                const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${nearest2BusStops[i].naptanId}/Arrivals`;
                 return reqPromise(setOptions(arrivalsUrl))
                     .then(function(arrivals) {
+                        // sort arrivals by time
                         arrivals.sort(function (a, b) {
                             return a.expectedArrival.substring(11, 16).localeCompare(b.expectedArrival.substring(11, 16));
                         });
-                        const firstFiveArrivals = arrivals.slice(0, 5);
-                        return firstFiveArrivals.map(arrival => {
-                            console.log(`station name: ${arrival.stationName}, line: ${arrival.lineName}, dest:  ${arrival.destinationName}, arrival: ${arrival.expectedArrival}`);
-                            return new Arrival(arrival.stationName, arrival.lineName, arrival.destinationName, arrival.expectedArrival);
-                        });
 
+                        const firstFiveArrivals = arrivals.slice(0, 5);
+                        // for each arrival push a [{bustop}:[{arrival}]]
+                        for (let j = 0; j < firstFiveArrivals.length; j++) {
+                           combinedArrivals.push([nearest2BusStops[i][new Arrival(
+                                firstFiveArrivals[j].lineName,
+                                firstFiveArrivals[j].destinationName,
+                                firstFiveArrivals[j].expectedArrival
+                            )]]);
+                        }
+                        // debugging
+                        for (let j = 0; j < combinedArrivals.length; j++) {
+                            console.log(`station name: ${combinedArrivals[j]}`);
+                        }
+                        return combinedArrivals;
                     })
                     .catch(function (err) {
                         console.log(err);
                     })
-                })
-                return nearest2BusStops;
+                }
+                return combinedArrivals; // This doesn't hold arrivals info yet
         })
         .catch(function (err) {
             console.log(err);
         })
 }
+// console.log(`nearest2BusStops[i]: ${nearest2BusStops[i].commonName} towards ${nearest2BusStops[i].towards}`);
+//console.log(`firstFiveArrivals[j].lineName: ${firstFiveArrivals[j].lineName}`);
