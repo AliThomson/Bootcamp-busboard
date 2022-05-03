@@ -18,10 +18,6 @@ const {isValidPostcode} = require('./validation');
 // }
 
 class BusStop {
-    naptanId;
-    commonName;
-    towards;
-    arrivals;
     constructor(naptanId, commonName, towards) {
         this.naptanId = naptanId;
         this.commonName = commonName;
@@ -29,9 +25,6 @@ class BusStop {
     }
 }
 class Arrival {
-    line;
-    destination;
-    arrivalTime;
     constructor(line, destination, arrivalTime) {
         this.line = line;
         this.destination = destination;
@@ -45,11 +38,8 @@ exports.getDepartures = async function(inpPostcode) {
 
     return reqPromise(setOptions(getCoordsUrl))
         .then(function (coords) {
-            return getBusStopsUrl = `https://api.tfl.gov.uk/StopPoint/?lat=${coords.result.latitude}&lon=${coords.result.longitude}&stopTypes=NaptanPublicBusCoachTram&radius=1000`;
-        })
-        .then(busStops => reqPromise(setOptions(getBusStopsUrl)))
-        .catch(function (err) {
-            console.log(err);
+            const getBusStopsUrl = `https://api.tfl.gov.uk/StopPoint/?lat=${coords.result.latitude}&lon=${coords.result.longitude}&stopTypes=NaptanPublicBusCoachTram&radius=1000`;
+            return reqPromise(setOptions(getBusStopsUrl));
         })
         .then(busStops => {
             let nearest2BusStops = busStops.stopPoints.slice(0, 2);
@@ -61,9 +51,9 @@ exports.getDepartures = async function(inpPostcode) {
                 const arrivalsUrl = `https://api.tfl.gov.uk/StopPoint/${busStop.naptanId}/Arrivals`;
                 return reqPromise(setOptions(arrivalsUrl))
                     .then(function(arrivals) {
-                        // sort arrivals by time
+                        // sort arrivals by timeToStation
                         arrivals.sort(function (a, b) {
-                            return a.expectedArrival.substring(11, 16).localeCompare(b.expectedArrival.substring(11, 16));
+                            return a.timeToStation - b.timeToStation;
                         });
 
                         const firstFiveArrivals = arrivals.slice(0, 5);
