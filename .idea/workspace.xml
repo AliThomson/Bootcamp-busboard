@@ -6,16 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="682c6e6d-9014-4506-a0d1-074443e317bc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/departuresController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/departures.js" beforeDir="false" afterPath="$PROJECT_DIR$/departures.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/departures.jade" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/error.jade" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.jade" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout.jade" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +74,7 @@
       <workItem from="1650965647747" duration="331000" />
       <workItem from="1650966380391" duration="43005000" />
       <workItem from="1651132524836" duration="53379000" />
-      <workItem from="1651563375479" duration="1256000" />
+      <workItem from="1651563375479" duration="2980000" />
     </task>
     <servers />
   </component>

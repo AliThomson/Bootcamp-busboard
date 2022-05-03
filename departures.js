@@ -16,6 +16,12 @@ const {isValidPostcode} = require('./validation');
 //         console.log("Postcode is invalid - please try again", err);
 //     }
 // }
+class Coordinates {
+    constructor(latitude, longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+}
 
 class BusStop {
     constructor(naptanId, commonName, towards) {
